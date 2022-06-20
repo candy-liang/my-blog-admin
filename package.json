@@ -9,8 +9,10 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.4",
+    "@icon-park/vue-next": "^1.4.0",
     "axios": "^0.27.2",
     "element-plus": "^2.2.5",
+    "qs": "^6.10.5",
     "vue": "^3.2.25",
     "vue-router": "^4.0.15",
     "vuex": "^4.0.2"

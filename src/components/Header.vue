@@ -85,15 +85,17 @@ const backHome = () => {
 }
 .w500 {
     width: 500px;
+    transition: all 0.5s;
 }
 @media screen and (max-width: 950px) {
     .w500 {
         width: 300px;
+        transition: all 0.5s;
     }
 }
 @media screen and (max-width: 730px) {
     .w500 {
-       display: none;
+        display: none;
     }
 }
 </style>

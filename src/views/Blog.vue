@@ -1,8 +1,9 @@
 <template>
     <div class="blog">
+        <!-- 文章分类 -->
         <div class="menu">
             <el-card class="card">
-                <h3>文章分类</h3>
+                <h3>文章分类 <all-application theme="outline" size="16" fill="#29b89b" /></h3>
                 <ul>
                     <li :class="{ active: currentClass == item.type }" v-for="item in menuList">
                         {{ item.name }}<span class="count">({{ item.count }})</span>
@@ -35,11 +36,11 @@
                             </div>
                         </div>
                         <div class="correlation">
-                            <el-icon :size="20"><ChatDotRound /></el-icon>
+                            <comment theme="outline" size="18" />
                             <span class="item">22</span>
-                            <el-icon :size="20"><View /></el-icon>
+                            <preview-open theme="outline" size="20" />
                             <span class="item">88</span>
-                            <el-icon :size="18"><Calendar /></el-icon>
+                            <calendar theme="outline" size="18" />
                             <span class="item">2022-06-06</span>
                         </div>
                     </el-card>
@@ -47,19 +48,20 @@
             </ul>
             <el-pagination class="pagination" background layout="prev, pager,next" :total="1000" />
         </div>
+        <!-- 热门文章/标签/友链 -->
         <div class="aside" v-show="!isDetail">
             <el-card class="card">
-                <h3>热门文章</h3>
+                <h3>热门文章 <fire theme="outline" size="16" fill="#ee8f8f" /></h3>
                 <ul class="hot_article">
-                    <li>判断能否成功返回上一页</li>
-                    <li>判断能否成功返回上一页</li>
-                    <li>判断能否成功返回上一页</li>
-                    <li>判断能否成功返回上一页</li>
-                    <li>判断能否成功返回上一页</li>
+                    <li>1. 判断能否成功返回上一页</li>
+                    <li>2. 判断能否成功返回上一页</li>
+                    <li>3. 判断能否成功返回上一页</li>
+                    <li>4. 判断能否成功返回上一页</li>
+                    <li>5. 判断能否成功返回上一页</li>
                 </ul>
             </el-card>
             <el-card class="card">
-                <h3>热门标签</h3>
+                <h3>热门标签 <tag theme="outline" size="16" fill="#f0a01c" /></h3>
                 <div class="tag_list">
                     <el-check-tag checked type="info">Tag 3</el-check-tag>
                     <el-check-tag type="info">Tag 3</el-check-tag>
@@ -70,7 +72,7 @@
                 </div>
             </el-card>
             <el-card class="card">
-                <h3>友链</h3>
+                <h3>友链 <link-two theme="outline" size="16" fill="#4a90e2" /></h3>
                 <div class="friend_link" v-for="item in 4">
                     <el-avatar shape="square" :size="40" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" />
                     <div class="name">
@@ -88,6 +90,9 @@
             <el-card class="card detail">
                 <div class="default-theme" ref="artContent" v-html="htmltext"></div>
             </el-card>
+            <el-card class="card">
+                <Comments></Comments>
+            </el-card>
             <md-editor editorId="my-editor" v-model="text" :preview="false" code-theme="atoms" @onHtmlChanged="saveHtml" @onGetCatalog="onGetCatalog" />
         </div>
         <div class="aside" v-if="isDetail && state.catalogList.length">
@@ -104,10 +109,18 @@
 </template>
 
 <script setup lang="ts">
-import { ChatDotRound, View, Calendar, ArrowLeft } from "@element-plus/icons-vue"
+import { ArrowLeft } from "@element-plus/icons-vue"
+import { Comment, PreviewOpen, Calendar, Tag, Fire, LinkTwo, AllApplication } from "@icon-park/vue-next"
 import MdEditor from "md-editor-v3"
 import "md-editor-v3/lib/style.css"
+import Comments from "@C/Comments.vue"
+import { getArticle } from "../../api/blogApi"
+console.log(getArticle);
+getArticle("/getClassification").then((res: any) => {
+    console.log(res)
+})
 const radio1 = ref("全部分类")
+
 MdEditor.config({
     editorExtensions: {
         highlight: {
@@ -211,6 +224,7 @@ const goBack = () => {
 .menu {
     width: 280px;
     position: fixed;
+    transition: all 0.5s;
 
     li {
         text-align: center;
@@ -307,10 +321,10 @@ const goBack = () => {
     color: #666;
     width: 280px;
     position: fixed;
+    transition: all 0.5s;
     right: 20px;
     .card {
         li {
-            padding: 0 10px;
             line-height: 30px;
             border-radius: 4px;
             cursor: pointer;
@@ -350,8 +364,18 @@ const goBack = () => {
         }
     }
 }
-
-@media screen and (max-width: 1610px) {
+@media screen and (max-width: 1366px) {
+    .menu,
+    .aside {
+        width: 240px;
+        transition: all 0.5s;
+    }
+    .center {
+        margin: 0 260px;
+        transition: all 1s;
+    }
+}
+@media screen and (max-width: 1100px) {
     .aside {
         display: none;
     }
@@ -359,12 +383,14 @@ const goBack = () => {
         margin-right: 0px !important;
     }
 }
-@media screen and (max-width: 1290px) {
+@media screen and (max-width: 1024px) {
     .menu {
         display: none;
+        transition: all 1s;
     }
     .menu2 {
         display: block;
+        transition: all 1s;
     }
     .center {
         margin-left: 0px !important;

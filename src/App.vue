@@ -3,8 +3,8 @@
         <Header :isHome="isHome" />
         <div class="main">
             <router-view></router-view>
-            <el-backtop :bottom="100" :visibility-height="50"></el-backtop>
         </div>
+        <el-backtop :bottom="100" :visibility-height="50"></el-backtop>
         <Footer :isHome="isHome" />
     </div>
 </template>
@@ -17,11 +17,7 @@ const route = useRoute()
 watch(
     () => route.name,
     (newValue, oldValue) => {
-        if (newValue != "home") {
-            isHome.value = false
-        } else {
-            isHome.value = true
-        }
+        isHome.value = newValue == "home"
     },
     { immediate: true }
 )
