@@ -5,7 +5,7 @@
             <el-card class="card">
                 <h3>文章分类 <all-application theme="outline" size="16" fill="#29b89b" /></h3>
                 <ul>
-                    <li :class="{ active: currentClass == item.type }" v-for="item in menuList">
+                    <li :class="{ active: current_class == item.type }" v-for="item in menu_list">
                         {{ item.name }}<span class="count">({{ item.count }})</span>
                     </li>
                 </ul>
@@ -13,77 +13,67 @@
         </div>
 
         <!-- 文章列表 -->
-        <div class="center" v-show="!isDetail">
+        <div class="center" v-show="!is_detail">
             <el-card class="card menu2">
                 <!-- <h3>文章分类</h3> -->
                 <el-radio-group v-model="radio1">
-                    <el-radio-button v-for="item in menuList" :label="item.name">{{ item.name }}</el-radio-button>
+                    <el-radio-button v-for="item in menu_list" :label="item.name">{{ item.name }}</el-radio-button>
                 </el-radio-group>
             </el-card>
             <ul>
-                <li v-for="item in 6" @click="isDetail = true">
+                <li v-for="item in article_list" @click="checkDetail">
                     <el-card class="card list">
-                        <h3>异步编程的实现</h3>
+                        <h3>{{ item.title }}</h3>
                         <div class="description">
                             <div class="left">
-                                JS是单线程运行的，那么在JS代码中想要实现异步就只有采用单线程非阻塞式的方式分为两部分来执行，先调用setTimeout方法，然后把要执行的函数放到一个队列中。
-                                代码继续往下执行，当把所有的代码都执行完后，放到队列中的函数才会被执行. 这样，所有异步执行的函数都不会阻塞其他代码的执行。 注意，JS的单线程并不是指整个JS引擎只有1个线程。
-                                它是指运行代码只有1个线程，但是它还有其他线程来执行其他任务。 比如时间函数的计时、AJAX技术中的和后台交互等操作。 同时，由于执行代码只有1个线程，所以在任何同步代码中出现死循环，
-                                那么它后续的同步代码以及异步的回调函数都无法执行。
+                                {{ item.description }}
                             </div>
                             <div class="right">
-                                <img src="@/assets/avatar.jpg" alt="" />
+                                <img :src="item.poster" alt="" />
                             </div>
                         </div>
                         <div class="correlation">
                             <comment theme="outline" size="18" />
-                            <span class="item">22</span>
+                            <span class="item">{{ item.comment_count }}</span>
                             <preview-open theme="outline" size="20" />
-                            <span class="item">88</span>
+                            <span class="item">{{ item.view_count }}</span>
                             <calendar theme="outline" size="18" />
-                            <span class="item">2022-06-06</span>
+                            <span class="item">{{ item.create_time }}</span>
                         </div>
                     </el-card>
                 </li>
             </ul>
             <el-pagination class="pagination" background layout="prev, pager,next" :total="1000" />
         </div>
+
         <!-- 热门文章/标签/友链 -->
-        <div class="aside" v-show="!isDetail">
+        <div class="aside" v-show="!is_detail">
             <el-card class="card">
                 <h3>热门文章 <fire theme="outline" size="16" fill="#ee8f8f" /></h3>
-                <ul class="hot_article">
-                    <li>1. 判断能否成功返回上一页</li>
-                    <li>2. 判断能否成功返回上一页</li>
-                    <li>3. 判断能否成功返回上一页</li>
-                    <li>4. 判断能否成功返回上一页</li>
-                    <li>5. 判断能否成功返回上一页</li>
+                <ul class="hot-article">
+                    <li v-for="(item, index) in hot_article">{{ `${index + 1}、${item.title}` }}</li>
                 </ul>
             </el-card>
             <el-card class="card">
                 <h3>热门标签 <tag theme="outline" size="16" fill="#f0a01c" /></h3>
-                <div class="tag_list">
-                    <el-check-tag checked type="info">Tag 3</el-check-tag>
-                    <el-check-tag type="info">Tag 3</el-check-tag>
-                    <el-check-tag type="info">Tag 3</el-check-tag>
-                    <el-check-tag type="info">Tag 3</el-check-tag>
-                    <el-check-tag type="info">Tag 3</el-check-tag>
-                    <el-check-tag type="info">Tag 3</el-check-tag>
+                <div class="tag-list">
+                    <el-check-tag v-for="(item, index) in tag_list" :checked="item.name == current_tag" type="info" @change="checkedTag(item.name)">{{ item.name }}</el-check-tag>
                 </div>
             </el-card>
             <el-card class="card">
                 <h3>友链 <link-two theme="outline" size="16" fill="#4a90e2" /></h3>
-                <div class="friend_link" v-for="item in 4">
-                    <el-avatar shape="square" :size="40" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" />
+                <div class="friend-link" v-for="item in friend_list">
+                    <el-avatar shape="square" :size="40" :src="item.avatar" />
                     <div class="name">
-                        <h4>万能的网友</h4>
-                        <p>——精通各种前端技术</p>
+                        <h4>{{ item.name }}</h4>
+                        <p>—{{ item.motto }}</p>
                     </div>
                 </div>
             </el-card>
         </div>
+
         <!-- 文章详情 -->
-        <div class="center" v-show="isDetail">
+        <div class="center" v-show="is_detail">
             <el-card class="card detail">
                 <el-page-header @back="goBack" :icon="ArrowLeft" content="detail" />
             </el-card>
@@ -91,11 +81,12 @@
                 <div class="default-theme" ref="artContent" v-html="htmltext"></div>
             </el-card>
             <el-card class="card">
-                <Comments></Comments>
+                <Comments :data="comment_data" :total="comment_total"></Comments>
             </el-card>
             <md-editor editorId="my-editor" v-model="text" :preview="false" code-theme="atoms" @onHtmlChanged="saveHtml" @onGetCatalog="onGetCatalog" />
         </div>
-        <div class="aside" v-if="isDetail && state.catalogList.length">
+
+        <div class="aside" v-if="is_detail && state.catalogList.length">
             <el-card class="card">
                 <h3>目录</h3>
                 <ul>
@@ -114,11 +105,78 @@ import { Comment, PreviewOpen, Calendar, Tag, Fire, LinkTwo, AllApplication } fr
 import MdEditor from "md-editor-v3"
 import "md-editor-v3/lib/style.css"
 import Comments from "@C/Comments.vue"
-import { getArticle } from "../../api/blogApi"
-console.log(getArticle);
-getArticle("/getClassification").then((res: any) => {
-    console.log(res)
+import { getArticle, getTags, getFriendLink } from "../api/blog"
+
+const route = useRoute()
+const router = useRouter()
+
+// 获取分类总览
+const menu_list = reactive([])
+getArticle("/getClassification").then(res => {
+    menu_list.push(...res.data)
 })
+// 判断当前分类
+const current_class = computed(() => {
+    return route.query.current_class || "all"
+})
+
+// 获取热门文章
+const hot_article = reactive([])
+getArticle("/getListData", {
+    type: "all",
+    sort: "hot",
+    current_page: 1,
+    page_size: 5,
+}).then(res => {
+    hot_article.push(...res.data)
+})
+
+// 获取所有标签
+const tag_list = reactive([])
+getTags("/getAllTags").then(res => {
+    tag_list.push(...res.data)
+})
+
+// 控制点击标签高亮
+const current_tag = ref("")
+const checkedTag = (name: string) => {
+    current_tag.value = name
+}
+
+// 获取友链
+const friend_list = reactive([])
+getFriendLink("/getAllLink").then(res => {
+    friend_list.push(...res.data)
+})
+
+// 获取当前分类文章列表
+const article_list = reactive([])
+getArticle("/getListData", {
+    type: current_class.value,
+    sort: "",
+    current_page: 1,
+    page_size: 6,
+}).then(res => {
+    article_list.push(...res.data)
+})
+
+const is_detail = ref(false)
+const htmltext = ref("")
+const comment_data = reactive([])
+const comment_total = ref(0)
+
+// 获取文章详情
+const checkDetail = () => {
+    getArticle("/getDetail", {
+        id: 1,
+    }).then(res => {
+        htmltext.value = res.data.html
+        comment_total.value = res.data.comment_total
+        comment_data.push(...res.data.comment_data)
+        is_detail.value = true
+    })
+}
+
 const radio1 = ref("全部分类")
 
 MdEditor.config({
@@ -138,7 +196,6 @@ const state: any = reactive({
 })
 const onGetCatalog = (list: []) => {
     state.catalogList = list
-    console.log(state.catalogList)
 }
 
 const goAnchor = (selector: any) => {
@@ -146,51 +203,12 @@ const goAnchor = (selector: any) => {
 }
 
 const text = ref("Hello Editor!")
-const isDetail = ref(false)
-const menuList = reactive([
-    {
-        name: "全部分类",
-        type: "all",
-        count: "88",
-    },
-    {
-        name: "Html",
-        type: "html",
-        count: "18",
-    },
-    {
-        name: "Css",
-        type: "css",
-        count: "8",
-    },
-    {
-        name: "Javascript",
-        type: "js",
-        count: "28",
-    },
-    {
-        name: "Vue",
-        type: "vue",
-        count: "33",
-    },
-    {
-        name: "Node",
-        type: "ndoe",
-        count: "2",
-    },
-])
-const route = useRoute()
-const router = useRouter()
-const currentClass = computed(() => {
-    return route.query.currentClass
-})
-const htmltext = ref("")
+
 const saveHtml = (h: string) => {
     htmltext.value = h
 }
 const goBack = () => {
-    isDetail.value = false
-    // router.go(-1)
+    is_detail.value = false
 }
 </script>
 
@@ -333,16 +351,16 @@ const goBack = () => {
             }
         }
     }
-    .hot_article {
+    .hot-article {
         font-size: 14px;
         color: #666;
     }
-    .tag_list {
+    .tag-list {
         .el-check-tag {
             margin: 0 10px 10px 0;
         }
     }
-    .friend_link {
+    .friend-link {
         display: flex;
         margin-bottom: 10px;
         cursor: pointer;
@@ -357,9 +375,11 @@ const goBack = () => {
             font-weight: bold;
             line-height: 20px;
             color: #666;
+            @include textEllipsis(1);
             p {
                 font-size: 12px;
                 color: #aaa;
+                @include textEllipsis(1);
             }
         }
     }

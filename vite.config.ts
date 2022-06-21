@@ -32,11 +32,11 @@ export default defineConfig({
 
     // 设置代理，根据我们项目实际情况配置
     proxy: {
-      '/api': {
+      '/mock': {
         target: 'http://127.0.0.1:4523/mock/1150240',
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace('/api', '')
+        rewrite: (path) => path.replace('/mock', '')
       }
     }
   },

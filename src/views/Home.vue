@@ -1,7 +1,7 @@
 <template>
     <div class="home">
-        <div class="enter_blog" @click="enterBlog">进 入 博 客</div>
-        <div class="star_content">
+        <div class="enter-blog" @click="enterBlog">进 入 博 客</div>
+        <div class="star-content">
             <!-- 星星 -->
             <!-- size 尺寸    top 距离顶部位置     left 距离左边位置    
              right 距离右边位置    delay 延迟出现特效时间秒数 -->
@@ -36,10 +36,10 @@ const enterBlog = () => {
 </script>
 
 <style lang="scss" scoped>
-.star_content {
+.star-content {
     overflow-x: hidden;
 }
-.enter_blog {
+.enter-blog {
     position: fixed;
     top: 40%;
     left: 50%;
@@ -57,22 +57,22 @@ const enterBlog = () => {
     box-shadow: 0 0 10px rgb(0, 153, 184) inset, 0 0 30px rgb(0, 153, 184);
 
     /* IE10、Firefox and Opera，IE9以及更早的版本不支持 */
-    animation-name: bounce_in_top, breath; /* 动画名称 */
+    animation-name: bounce-in-top, breath; /* 动画名称 */
     animation-duration: 1.1s, 3s; /* 动画时长3秒 */
     animation-timing-function: ease-in-out, ease-in-out; /* 动画速度曲线：以低速开始和结束 */
     animation-iteration-count: 1, infinite; /* 播放次数：无限 */
 
     /* Safari and Chrome */
-    -webkit-animation-name: bounce_in_top, breath; /* 动画名称 */
+    -webkit-animation-name: bounce-in-top, breath; /* 动画名称 */
     -webkit-animation-duration: 1.1s, 3s; /* 动画时长3秒 */
     -webkit-animation-timing-function: ease-in-out, ease-in-out; /* 动画速度曲线：以低速开始和结束 */
     -webkit-animation-iteration-count: 1, infinite; /* 播放次数：无限 */
 }
-.enter_blog:hover {
+.enter-blog:hover {
     animation: none;
 }
 
-@keyframes bounce_in_top {
+@keyframes bounce-in-top {
     0% {
         transform: translate(-50%, -500px);
     }

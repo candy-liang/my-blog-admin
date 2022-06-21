@@ -1,5 +1,5 @@
 <template>
-    <div class="header" :class="{ cover_class: !isHome }">
+    <div class="header" :class="{ 'cover-class': !isHome }">
         <div class="logo" @click="backHome" title="返回首页">
             <img v-show="isHome" src="../assets/logobai.png" alt="" />
             <img v-show="!isHome" src="../assets/logohei.png" alt="" />
@@ -79,7 +79,7 @@ const backHome = () => {
         }
     }
 }
-.cover_class {
+.cover-class {
     background-color: rgba(255, 255, 255, 0.8);
     color: #333;
 }
