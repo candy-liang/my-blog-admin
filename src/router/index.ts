@@ -4,14 +4,19 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'home',
-    component: () => import('@/views/Home.vue') 
+    component: () => import('@/views/Home.vue')
   },
   {
-    path: '/blog',
-    name: 'blog',
-    component: () => import('@/views/Blog.vue') 
+    path: '/article/class',
+    name: 'artitle_class',
+    component: () => import('@/views/article/Class.vue')
   },
-  
+  {
+    path: '/article/list',
+    name: 'artitle_list',
+    component: () => import('@/views/article/List.vue')
+  },
+
 ]
 
 const router = createRouter({

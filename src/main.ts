@@ -4,7 +4,7 @@ import router from './router'
 import { createPinia } from 'pinia'
 import axios from "axios";
 import '@icon-park/vue-next/styles/index.css';
-
+import 'element-plus/dist/index.css'
 //引入组件库
 //引入样式
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
